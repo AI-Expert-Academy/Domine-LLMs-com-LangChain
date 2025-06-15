@@ -74,3 +74,32 @@ def model_groq(model="llama3-70b-8192", temperature=0.1):
         max_retries=2
     )
     return llm
+
+# Indexação e recuperação
+def config_retriever(uploads):
+    #Carregar documentos
+    docs = []
+    temp_dir = tempfile.TemporaryDirectory()
+    for file in uploads:
+        temp_filepath = os.path.join(temp_dir.name, file.name)
+        with open(temp_filepath, "wb") as f:
+            f.write(file.getvalue())
+        loader = PyPDFLoader(temp_filepath)
+        docs.extend(loader.load())
+
+    # Divisão em pedaços de texto / split
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    splits = text_splitter.split_documents(docs)
+
+    # Embeddings
+    embeddings = HuggingFaceEmbeddings(model_name="BAAI/bge-m3")
+
+    # Armazenamento vetorial
+    vectorstore = FAISS.from_documents(splits, embeddings)
+    vectorstore.save_local('vectorstore/db_faiss')
+
+    # Configuração do retriever
+    retriever = vectorstore.as_retriever(seach_type="mmr", 
+                                         search_kwargs={"k": 3, 'fetch_k': 4})
+
+    return retriever
