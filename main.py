@@ -165,3 +165,65 @@ uploads = st.sidebar.file_uploader(
     type=["pdf"],
     accept_multiple_files=True
 )
+
+if not uploads:
+    st.sidebar.warning("Por favor, carregue pelo menos um documento PDF.")
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = [        
+        AIMessage(content="Olá, sou o seu assistente virtual! Como posso ajudar você?")
+    ]
+
+if "docs_list" not in st.session_state:
+    st.session_state.docs_list = None
+
+if "retriever" not in st.session_state:
+    st.session_state.retriever = None
+
+for message in st.session_state.chat_history:
+    if isinstance(message, AIMessage):
+        with st.chat_message("AI"):
+            st.write(message.content)
+    elif isinstance(message, HumanMessage):
+        with st.chat_message("Human"):
+            st.write(message.content)
+
+start = time.time()
+user_query = st.chat_input("Digite sua mensagem aqui...")
+
+if user_query is not None and user_query != "" and uploads is not None:
+    st.session_state.chat_history.append(HumanMessage(content=user_query))
+    
+    with st.chat_message("Human"):
+        st.markdown(user_query)
+
+    with st.chat_message("AI"):
+        if st.session_state.docs_list != uploads:
+            st.session_state.docs_list = uploads
+            st.session_state.retriever = config_retriever(uploads)
+        
+        rag_chain = config_rag_chain(model_class, st.session_state.retriever)
+
+        result = rag_chain.invoke({
+            "input": user_query,
+            "chat_history": st.session_state.chat_history
+        })
+
+        resp = result["answer"]
+        st.write(resp)
+
+        # Mostrar a fonte de dados
+        sources = result['context']
+        for idx, doc in enumerate(sources):
+            source = doc.metadata['source']
+            file = os.path.basename(source)
+            page = doc.metadata.get('page', 'Página não especificada')
+
+            ref = f":link: Fonte {idx}: *{file} - p. {page}*"
+            with st.popover(ref):
+                st.caption(doc.page_content)
+    
+    st.session_state.chat_history.append(AIMessage(content=resp))
+
+end = time.time()
+print(f"Tempo de execução: {end - start:.2f} segundos")
