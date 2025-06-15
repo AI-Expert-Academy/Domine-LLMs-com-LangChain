@@ -25,3 +25,5 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.document_loaders import PyPDFLoader
 
 from dotenv import load_dotenv
+
+torch.classes.__path__ = []
