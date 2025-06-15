@@ -27,3 +27,13 @@ from langchain_community.document_loaders import PyPDFLoader
 from dotenv import load_dotenv
 
 torch.classes.__path__ = []
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv(override=True)
+
+# Configurações do Streamlit
+st.set_page_config(
+    page_title="Converse com documentos",
+    page_icon=":books:"
+)
+st.title("Converse com documentos 📚")
