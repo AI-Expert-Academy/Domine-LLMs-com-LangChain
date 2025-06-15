@@ -37,3 +37,40 @@ st.set_page_config(
     page_icon=":books:"
 )
 st.title("Converse com documentos 📚")
+
+model_class = "groq" # @param ["hf_hub", "openai", "ollama", "groq"]
+
+## Provedores de modelos
+def model_hf_hub(model="microsoft/Phi-3-mini-4k-instruct", temperature=0.1):
+  llm = HuggingFaceEndpoint(repo_id = model,
+      temperature = temperature,
+      return_full_text = False,
+      max_new_tokens = 1024,
+      task="text-generation"
+  )
+  return llm
+
+def model_openai(model="gpt-4o-mini", temperature=0.1):
+    llm = ChatOpenAI(
+        model=model,
+        temperature=temperature
+        # demais parâmetros que desejar
+    )
+    return llm
+
+def model_ollama(model="phi3", temperature=0.1):
+    llm = ChatOllama(
+        model=model,
+        temperature=temperature,
+    )
+    return llm
+
+def model_groq(model="llama3-70b-8192", temperature=0.1):
+    llm = ChatGroq(
+        model=model,
+        temperature=temperature,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2
+    )
+    return llm
