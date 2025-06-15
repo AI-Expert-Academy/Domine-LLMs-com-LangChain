@@ -158,3 +158,10 @@ def config_rag_chain(model_class, retriever):
     rag_chain = create_retrieval_chain(history_aware_retriever, qa_chain,)
 
     return rag_chain
+
+# Criação de painel lateral na interface
+uploads = st.sidebar.file_uploader(
+    label = "Carregue seus documentos PDF",
+    type=["pdf"],
+    accept_multiple_files=True
+)
