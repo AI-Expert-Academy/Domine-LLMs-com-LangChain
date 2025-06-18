@@ -1,23 +1,24 @@
 # Projeto 3
 
-```
-cd projeto3
-```
+## Pre reqs
+* Python 3.11.13
 
-## Create and activate virtual environment
+## Projeto 3
+
+### Create and activate virtual environment
 
 ```
 python -m venv .venv 
 source .venv/bin/activate
 ```
 
-## Install dependencies
+### Install dependencies
 
 ```
-pip install streamlit langchain langchain_community langchain-huggingface langchain_ollama langchain_openai faiss-cpu pypdf python-dotenv langchain-groq torch sentence-transformers
+pip install -r requirements.txt
 ```
 
-## Run
+### Run
 
 ```
 streamlit run main.py
