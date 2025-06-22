@@ -1,3 +1,7 @@
+# Curso Domine LLMs com LangChain
+
+Curso realizado usando Google Colab.
+
 # Projeto 3
 
 ## Pre reqs
