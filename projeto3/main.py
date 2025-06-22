@@ -106,8 +106,6 @@ def config_retriever(uploads):
 
 # Configuração da chain completa
 def config_rag_chain(model_class, retriever):
-    print(retriever)
-    
     # Carregamento da LLM
     if model_class == "hf_hub":
         llm = model_hf_hub()
