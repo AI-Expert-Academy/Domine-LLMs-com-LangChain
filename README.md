@@ -1,6 +1,7 @@
 # Curso Domine LLMs com LangChain
 
 Curso realizado usando Google Colab.
+Link do curso: https://iaexpert.academy/cursos-online-assinatura/domine-llms-com-langchain/
 
 # Projeto 3
 
